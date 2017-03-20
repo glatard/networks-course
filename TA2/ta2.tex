@@ -1,0 +1,149 @@
+\documentclass{llncs}
+
+\usepackage{amsmath} % for equation*
+\usepackage{color}
+\usepackage{hyperref}
+\usepackage{graphicx}
+\definecolor{darkgreen}{rgb}{0,0.7,0}
+
+% Fix link colors
+\hypersetup{
+    colorlinks = true,
+    linkcolor=red,
+    citecolor=red,
+    urlcolor=blue,
+    linktocpage % so that page numbers are clickable in toc
+}
+
+\newcounter{ques}
+\setcounter{ques}{1}
+
+\newcommand{\quest}[2]{\paragraph{}\textbf{Q\theques} - #1\stepcounter{ques} }
+
+\newcommand{\answer}[1]{}%\color{red}\textit{#1}\color{black}}
+\title{COMP 445 -- Theoretical Assignment 2 (TA2)}
+
+\author{Tristan Glatard\\
+  \href{mailto:tristan.glatard@concordia.ca}{tristan.glatard@concordia.ca}\\
+  \vspace*{0.3cm}
+  (adapted from Aiman Hanna)\\
+  version 1.0
+  }
+
+\institute{Concordia University\\
+  Department of Computer Science and Software Engineering}
+
+\begin{document}
+
+\maketitle
+
+All questions will receive equal points. Please submit your assignment
+as a pdf file on Moodle. The name of the pdf file must contain your
+name and student id. Your name and student id must also appear in the
+header of the pdf document. Please answer the questions in the order
+used below and indicate the question number before your answer (e.g.,
+\textbf{Q1}). Wherever possible, briefly indicate the method used to
+obtain a numerical value, e.g., mathematical formula. Due date:
+\textbf{Feb 17, 11:55pm}.
+
+\section{Transport Layer}
+
+% Multiplexing - demultiplexing
+
+\quest{Describe the one service provided by UDP that justifies the
+  existence of this protocol in addition to network-level protocols
+  such as IP. In addition, explain why applications may want to use UDP
+  rather than TCP even though it provides less services.}
+
+\answer{UDP provides multiplexing and de-multiplexing, i.e., it allows
+  clients to communicate with specific processes on the server. IP, on
+  the contrary, only enables communication among hosts.  Applications
+  may want to use UDP to avoid TCP's overhead (e.g., connection
+  establishment, error recovery) and throughput reduction mechanisms
+  (for flow control or congestion control).}
+
+\quest{Explain why two TCP segments with identical destination ports
+  and IP addresses may end up being delivered to two different sockets
+  of this host. Can this situation happen with UDP and if yes, why?}
+
+\answer{This situation happens when 2 clients located on different
+  hosts open TCP connections with the same process of the same server
+  (e.g., they both open connections with the same Web server). See slide 14. This situation cannot happen with UDP (see slide 11).}
+
+% UDP
+
+\quest{Based on your knowledge of the UDP header format, explain why
+  UDP header field(s) impose a theoretical limit on the size of the
+  data that can be carried in a UDP segment. What is this limit? Can
+  this problem be addressed?}
+
+\answer{The UDP header has a \texttt{length} field coded on 16
+  bits. This field contains the length of the segment in bytes. Its
+  maximal value is $2^{16}-1$=65,535. Therefore the maximal length of
+  UDP segments is 65,535 bits. There is no way to address this problem
+  without a revision of the UDP specification. However, the UDP header
+  field size is not a bottleneck with IPv4 since the IPv4 maximal
+  datagram size is also 65,535 bits.}
+
+\quest{Explain how UDP segments can end up TCP segments being delayed,
+  theoretically, indefinitely! If so, what would you propose as
+  changes to UDP to mitigate this problem?  Your solution must mainly
+  keep the advantages/purpose of UDP, while mitigating the problem at
+  hand.}
+
+\answer{Since UDP doesn't implement congestion control, flooding the
+  network with UDP segments would result in high congestion leading to
+  high packet loss and long queuing delays. If packet loss is high,
+  the congestion window will remain low, around 1 segment, and TCP
+  will remain in slow-start mode. As the packet loss rate increases,
+  the probability that a client receives an ACK decreases (receiving
+  an ACK requires 2 segments to be successfully transmitted, the data
+  segment and the ACK). Meanwhile, if queuing delays are high, the TCP
+  timeout value will grow, which will further delay retransmission. }
+
+\quest{Show, through an example, how checksum could be inconclusive of
+  error detection (i.e.  does not guarantee that errors can be
+  detected). In your example, assume transmitted data is broken into
+  24-bit chunks by the protocol utilizing checksum. In case errors are
+  detected by checksum, does that fully (100\%) guarantee that errors
+  must have actually occurred?}
+
+
+% TCP
+
+\quest{Explain why we sometimes need to add padding bytes to TCP
+  segment headers.}
+
+\answer{Because the header size is expressed in 32-bit words.}
+
+\quest{Explain the difference between congestion control and flow
+  control. Mention the mechanisms in the TCP protocol that provide
+  each of these two services (no description of the mechanisms is required).}
+
+%\quest{Summarize the mechanisms that make TCP a reliable data transfer
+%  protocol.}
+
+% \quest{To what extent does Network Address Translation (NAT) break the
+%  Internet protocol stack model? List at least two reasons.}
+
+\quest{TCP acknowledgments arrive after 26, 32 and 24ms. What is the
+  new estimated RTT value after each of these acknowledgments
+  arrived, taking an initial estimated RTT of 30ms and $\alpha=0.125$?}{1} 
+
+\answer{See slide 62}
+
+\quest{The TCP timer expires (i.e., a timeout occurs) while the
+  congestion window size was 18KB, the congestion threshold was 20KB
+  and TCP was in congestion avoidance mode. What will be the new
+  window size after 4 successful transmissions? Assume a max segment
+  size (MSS) of 1KB. Consider both TCP Reno and TCP Tahoe.}
+
+\answer{See slide 104.}
+
+\quest{Conduct a small research on SYN flooding and explain how this
+  technique can be used as a DDos attack on a TCP server. What are the
+  efficient counter measures to such an attack?}
+
+\answer{See RFC 4987.}
+
+\end{document}
