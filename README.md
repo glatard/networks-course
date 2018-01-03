@@ -10,4 +10,4 @@ other branches contain material used in previous years.
 
 For Concordia students:
 * The official course outline is at https://users.encs.concordia.ca/~tglatard/teaching/networks/winter-2018
-* The official assignments and exam solutions will be posted on Moodle. 
+* The official assignments and exam solutions will be posted on [Moodle](https://moodle.concordia.ca/moodle/course/view.php?id=101934). 
