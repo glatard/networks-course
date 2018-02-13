@@ -19,7 +19,7 @@
 }
 
 
-\newcommand{\answer}[1]{}%{\color{red}\textit{#1}\color{black}}
+\newcommand{\answer}[1]{{\color{red}\textit{#1}\color{black}}}
 \title{COMP 445 -- Theoretical Assignment 1 (TA1)\\ Winter 2018}
 
 \author{Tristan Glatard\\
@@ -82,10 +82,14 @@ Signature: \dotfill
 \begin{tabular}{ccl}
   a) & $\Box$ & At the network core. \\
   \\
-  b) & $\Box$ & At the network edge. \\
+  b) & $\CheckedBox$ & At the network edge. \\
   \\
   c) & $\Box$ & Both at the network core and at the network edge. 
 \end{tabular}
+
+\answer{The application and transport layers are both implemented only at
+  the network edge. It means that they are only implemented in end
+  systems but not in routers. See slide 62 in Chapter 1.}
 
 \paragraph{\textbf{Q2:}} Consider two hosts A and B connected through a single router X (the
   network looks like A -- X -- B). Assume that the link between A and
@@ -95,7 +99,7 @@ Signature: \dotfill
   delays except the transmission delay are negligible? We assume that 1~Gb=1000~Mb.\\
   
 \begin{tabular}{ccl}
-  a) & $\Box$ & 5.5~ms\\
+  a) & $\CheckedBox$ & 5.5~ms\\
   \\
   b) & $\Box$ & 7.5~ms\\
   \\
@@ -103,6 +107,16 @@ Signature: \dotfill
   \\
   d) & $\Box$ & None of the above.
 \end{tabular}
+
+\answer{ The delivery time is the sum of (1) the transmission delay
+  \underline{of the last packet} from A to X and (2) the transmission delay
+  \underline{of the last packet} from X to B.
+\begin{itemize}
+ \item Transmission delay from A to X: $t_{A-X}=N\frac{L}{R_{A-X}}$ (N-1 packets have to be transmitted before the last packet can be transmitted).
+ \item Transmission delay from X to B: $t_{X-B}=\frac{L}{R_{X-B}}$ (when the last packet arrives in X, the first N-1 have already been transmitted since $R_{X-B}>R_{A-X}$).
+ \item See slides 45-47 in Chapter 1.
+\end{itemize}
+}
 
 \paragraph{\textbf{Q3:}} Starting from the same network as in the previous question, we now assume that propagation delays are not negligible:
 \begin{itemize}
@@ -118,20 +132,27 @@ What is the new delivery time between A and B for the same N=5 packets?\\
   \\
   c) & $\Box$ & 51.5~ms\\
   \\
-  d) & $\Box$ & 55.7~ms
+  d) & $\CheckedBox$ & 55.7~ms
 \end{tabular}
+
+
+\answer{The propagation delay adds to the transmission time. The new delivery time is: $t_{A-X}+t_{X-B}+\frac{l_{A-X}}{s}+\frac{l_{X-B}}{s}$.
+See slide 45 in Chapter 1. 
+}
 
 \paragraph{\textbf{Q4:}} In the Internet protocol stack, the transport layer can directly use services from:\\
 
 \begin{tabular}{ccl}
   a) & $\Box$ & The application layer.\\
   \\
-  b) & $\Box$ & The network layer.\\
+  b) & $\CheckedBox$ & The network layer.\\
   \\
   c) & $\Box$ & The link layer.\\
   \\
   d) & $\Box$ & All of the above.
 \end{tabular}
+
+\answer{In the layer model, a layer only uses services from the layer just below. See slide 58 in Chapter 1. }
 
 \paragraph{\textbf{Q5:}} What is the probability that more than 5 users are active at the same time in a network of 15 users where each user is active 20\% of the time?\\
 
@@ -142,8 +163,12 @@ What is the new delivery time between A and B for the same N=5 packets?\\
   \\
   c) & $\Box$ & 0.04\\
   \\
-  d) & $\Box$ & 0.06
+  d) & $\CheckedBox$ & 0.06
 \end{tabular}
+
+\answer{
+  $P=\sum_{i=6}^{15}{\binom {15}i 0.2^{i}0.8^{(15-i)}}$. See slide 30 in Chapter 1.
+}
 
 \section*{Application layer}
 
@@ -160,8 +185,16 @@ This trace contains:\\
   \\
   c) & $\Box$ & An IP datagram encapsulated in a UDP datagram.\\
   \\
-  d) & $\Box$ & A DNS query encapsulated in a UDP datagram.
+  d) & $\CheckedBox$ & A DNS query encapsulated in a UDP datagram.
 \end{tabular}
+
+\answer{Wireshark traces are read from bottom to top. DNS (Domain Name
+  System) is an application-level protocol therefore it has to use a
+  transport-level protocol which happens to be UDP (User Datagram
+  Protocol) here. IP datagrams could never be encapsulated in UDP datagrams
+  since IP belongs to a lower layer than UDP. HTTP requests could
+  never be encapsulated in DNS queries since both protocols are
+  application-level.}
 
 \paragraph{\textbf{Q7:}} Among the following HTTP methods, which one(s) may be used to upload a file to a
 Web server?\\
@@ -169,12 +202,14 @@ Web server?\\
 \begin{tabular}{ccl}
   a) & $\Box$ & GET\\
   \\
-  b) & $\Box$ & POST\\
+  b) & $\CheckedBox$ & POST\\
   \\
-  c) & $\Box$ & PUT\\
+  c) & $\CheckedBox$ & PUT\\
   \\
   d) & $\Box$ & HEAD\\
 \end{tabular}
+
+\answer{See slides 29-30 in Chapter 2.}
 
 \paragraph{\textbf{Q8:}} Among the following protocols, which one(s) are \textbf{not} involved in the retrieval of the Web page at URL \texttt{http://www.concordia.ca/} with a Web browser?\\
 
@@ -185,8 +220,14 @@ Web server?\\
   \\
   c) & $\Box$ & HTTP\\
   \\
-  d) & $\Box$ & SMTP\\
+  d) & $\CheckedBox$ & SMTP\\
 \end{tabular}
+
+\answer{Before the communication can be initiated, the IP address of
+  \texttt{www.concordia.ca} has to be looked up, which is done using
+  DNS. The connection is then established using TCP. Finally, the
+  webpage is requested using HTTP. SMTP is an email protocol which has
+  nothing to do with the Web.}
 
 \paragraph{\textbf{Q9:}} DNS may be used to retrieve the name of the email server of a specific domain:\\
 
@@ -200,16 +241,28 @@ Web server?\\
   d) & $\Box$ & through any type of recursive query.\\
 \end{tabular}
 
+\answer{None of the options are correct. a) CNAME records associate
+  names with canonical names, they are used to lookup aliases. b) NS
+  records associate domain names with host names, they are used to
+  lookup name servers. c) and d) Iterated or recursive queries can be
+  used for any type of query but they don't preclude any particular
+  record type. Email servers can be retrieved by querying for MX
+  records. See slide 66 in Chapter 2.}
+
 \paragraph{\textbf{Q10:}} SMTP is:\\
 
 \begin{tabular}{ccl}
-  a) & $\Box$ & a push protocol.\\
+  a) & $\CheckedBox$ & a push protocol.\\
   \\
   b) & $\Box$ & a deprecated protocol.\\
   \\
   c) & $\Box$ & a transport protocol (a protocol belonging to the transport layer).\\
   \\
-  d) & $\Box$ & a text (ASCII) protocol.\\
+  d) & $\CheckedBox$ & a text (ASCII) protocol.\\
 \end{tabular}
+
+\answer{See slides 47 and 51 in Chapter 2. SMTP is still used in all
+  email communications -- it is not deprecated. It is an application
+  protocol, not a transport one.}
 
 \end{document}
