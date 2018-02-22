@@ -1,0 +1,278 @@
+\documentclass{llncs}
+
+\usepackage{amsmath} % for equation*
+\usepackage{wasysym} % for \Box
+\usepackage{color}
+\usepackage{hyperref}
+\usepackage{graphicx}
+\definecolor{darkgreen}{rgb}{0,0.7,0}
+
+\newcommand{\myspace}[0]{\vspace*{0.25cm}}
+
+% Fix link colors
+\hypersetup{
+  colorlinks = true,
+  linkcolor=red,
+  citecolor=red,
+  urlcolor=blue,
+  linktocpage % so that page numbers are clickable in toc
+}
+
+
+\newcommand{\answer}[1]{\color{red}\textit{#1}\color{black}}
+\title{COMP 445 -- Theoretical Assignment 2 (TA1)\\ Winter 2018}
+
+\author{Tristan Glatard\\
+  \href{mailto:tristan.glatard@concordia.ca}{tristan.glatard@concordia.ca}
+}
+
+\institute{Concordia University\\
+  Department of Computer Science and Software Engineering}
+
+\begin{document}
+
+\maketitle
+
+\section*{Instructions}
+
+\begin{itemize}
+\item Please submit your assignment  as a pdf file on Moodle. The name of the pdf file must contain your name and student id. 
+\item All questions will receive equal points.
+\item Each question may have zero, one, or more than one
+  correct choices.
+\item Partial answers will not
+  receive any point.
+\item Blank answers (no answer) will not be penalized.
+\end{itemize}
+
+\hrulefill\\
+
+\myspace
+
+\myspace
+
+Student ID: \dotfill
+
+\myspace
+
+\myspace
+
+First Name / Last Name: \dotfill
+
+\myspace
+
+\myspace
+
+Signature: \dotfill
+
+\myspace
+
+\myspace
+
+\hrulefill
+
+\newpage
+
+\section*{Transport Layer}
+
+\paragraph{\textbf{Q1:}}
+Among the following services, which ones are provided by UDP?
+
+\begin{tabular}{ccl}
+  a) & $\Box$ &  Congestion control\\
+  \\
+  b) & $\Box$ &  Flow control \\
+  \\
+  c) & $\Box$ &  Reliable data transfer\\
+  \\
+  d) & $\Box$ &  Bandwidth reservation
+\end{tabular}
+
+\answer{None of these services are provided by UDP. See slide 16.}
+
+% An application should use UDP vs plain IP (network layer protocol) because...
+\paragraph{\textbf{Q2:}}
+An application may choose to transmit data using UDP rather than just IP (the network-level protocol) when it needs:
+
+\begin{tabular}{ccl}
+  a) & $\Box$ &  High throughput\\
+  \\
+  b) & $\CheckedBox$ &  Multiplexing / de-multiplexing\\
+  \\
+  c) & $\Box$ &  Security\\
+  \\
+  d) & $\Box$ &  Connection management (establishment, teardown)
+\end{tabular}
+
+\answer{Multiplexing and de-multiplexing of datagrams through sockets
+  is the main service provided by UDP, through port numbers. UDP
+  doesn't provide security or connection management. UDP would provide
+  a high throughput \emph{compared to TCP} but not compared to only IP.}
+
+\paragraph{\textbf{Q3:}}
+% TCP RTT calculation
+TCP acknowledgments arrive with RTT values of 29, 31 and 32ms. What is the new
+estimated RTT value after the third acknowledgement was received, taking an
+initial estimated RTT of 31ms and $\alpha$ = 0.125?
+
+\begin{tabular}{ccl}
+  a) & $\Box$ &  32ms\\
+  \\
+  b) & $\CheckedBox$ &  30.9ms\\
+  \\
+  c) & $\Box$ &  31.8ms\\
+  \\
+  d) & $\Box$ &  31.1ms
+\end{tabular}
+
+\answer{See slide 62 in Chapter 3.
+  $\mathrm{EstimatedRTT} = (1-\alpha)\mathrm{EstimatedRTT} + \alpha\mathrm{SampleRTT}$.
+  \begin{itemize}
+  \item Before the first ACK is received: $\mathrm{EstimatedRTT}$=31ms.
+  \item After the first ACK is received: $\mathrm{EstimatedRTT}$=(1-0.125)*31+0.125*29=30.75ms
+  \item After the second ACK is received: $\mathrm{EstimatedRTT}$=(1-0.125)*30.75+0.125*31=30.78ms
+  \item After the third ACK is received: $\mathrm{EstimatedRTT}$=(1-0.125)*30.78+0.125*32=30.93ms
+  \end{itemize}
+}
+
+\paragraph{\textbf{Q4:}}
+Two non-duplicate ACKs are received while a TCP sender is in Slow
+Start mode with cwnd=1KB, ssthresh=64KB and MSS=1KB. What is the
+state of the TCP sender after the second ACK is received?
+
+\begin{tabular}{ccl}
+  a) & $\CheckedBox$ &  Slow Start\\
+  \\
+  b) & $\Box$ &  Congestion Avoidance\\
+  \\
+  c) & $\Box$ & Fast Recovery \\
+  \\
+  d) & $\Box$ & SYN sent \\
+\end{tabular}
+
+\answer{See slide 101 in Chapter 3. In Slow Start mode, 1MSS is added
+  to cwnd every time a non-duplicate ACK is received. In addition,
+  state changes to Congestion Avoidance when cwnd reaches the
+  slow-start threshold (ssthresh). In our situation:
+  \begin{itemize}
+  \item After the first ACK is received: cwnd=2KB; cwnd \textless ssthresh; state remains Slow Start.
+  \item After the second ACK is received: cwnd=3KB; cwnd \textless sstresh; state remains Slow Start.
+\end{itemize}}
+
+\paragraph{\textbf{Q5:}}
+Assuming the same initial state and sequence of events as in the
+previous question, what will be the value of the cwnd variable (size
+of the congestion window) after the second ACK is received?
+
+\begin{tabular}{ccl}
+  a) & $\Box$ &  1KB\\
+  \\
+  b) & $\Box$ &  2KB\\
+  \\
+  c) & $\CheckedBox$ &  3KB\\
+  \\
+  d) & $\Box$ &  4KB
+\end{tabular}
+
+\answer{See answer to the previous question.}
+
+% TCP/UDP trace analysis
+\paragraph{\textbf{Q6:}}
+The content below was captured using
+Wireshark:\\
+\includegraphics[width=\textwidth]{tcp.png}
+This trace contains:\\
+
+\begin{tabular}{ccl}
+  a) & $\CheckedBox$ & A TCP segment that contains an acknowledgment  \\
+  \\
+  b) & $\Box$ & A UDP segment that contains an acknowledgment \\
+  \\
+  c) & $\Box$ & A TCP segment that contains an HTTP message \\
+  \\
+  d) & $\Box$ & An HTTP message that contains a TCP segment \\
+\end{tabular}
+
+\answer{The trace shows a TCP segment (see blue highlight). The
+  segment contains an acknowledgment, as shown by the flags. b) The
+  trace doesn't show any UDP segment (and it couldn't, as a packet
+  couldn't use both UDP and TCP). c) Although a TCP segment might
+  contain an HTTP message, it is not the case here: the length of the
+  segment is 0, which means that the segment doesn't contain any data
+  (it's just an ACK). d) An HTTP message may not contain a TCP segment
+  since HTTP is an application-level protocol and TCP is transport-level.}
+
+% Mechanisms to reliable data transfers
+%   checksum, timeouts, acks, sequence numbers
+\paragraph{\textbf{Q7:}}
+Among the following mechanisms, which one(s) can be used to provide reliable data transfer? 
+
+\begin{tabular}{ccl}
+  a) & $\CheckedBox$ & Checksums  \\
+  \\
+  b) & $\CheckedBox$ &  Timeouts\\
+  \\
+  c) & $\CheckedBox$ &  Sequence numbers\\
+  \\
+  d) & $\CheckedBox$ &  Acknowledgments\\
+\end{tabular}
+
+\answer{All these mechanisms may be used to provide reliable data transfer. See slides 28-41.}
+
+\paragraph{\textbf{Q8:}}
+In connection-oriented multiplexing, two packets with the same
+ source host, source port, destination host and destination port
+ might be delivered to two different sockets:
+ 
+\begin{tabular}{ccl}
+  a) & $\Box$ & Yes\\
+  \\
+  b) & $\CheckedBox$ &  No\\
+\end{tabular}
+
+\answer{In connection-oriented (de-)multiplexing, packets are assigned
+  to sockets based on the source host, source port, destination host and destination port only. See slide 12. }
+
+\paragraph{\textbf{Q9:}}
+What is the UDP checksum of D=10101010101010101010101010101010?
+
+\begin{tabular}{ccl}
+  a) & $\CheckedBox$ & 1010101010101010\\
+  \\
+  b) & $\Box$ & 0101010101010101\\
+  \\
+  c) & $\Box$ & 1111111111111111\\
+  \\
+  d) & $\Box$ & 0000000000000000\\
+\end{tabular}
+
+\answer{See slide 19. The checksum is the complement to 1 of the sum of each 16-bit word in D:\\
+\begin{tabular}{l|rl}
+ word 1&&1010101010101010\\
+ word 2&+&1010101010101010\\
+\hline
+wraparound&1&0101010101010100\\
+sum&&0101010101010101\\
+\hline
+checksum&&1010101010101010
+\end{tabular}
+}
+
+\paragraph{\textbf{Q10:}}
+In a pipelined protocol, the sender allows N simultaneous non-acknowledged packets. This is meant to:
+
+\begin{tabular}{ccl}
+  a) & $\Box$ & Increase network utilization, by a factor of $\frac{N}{2}$.\\
+  \\
+  b) & $\CheckedBox$ &  Increase network utilization, by a factor of $N$.\\
+  \\
+  c) & $\Box$ &  Reduce packet queuing time, by a factor of $\frac{N}{2}$.\\
+  \\
+  d) & $\Box$ &  Reduce packet queuing time, by a factor of $N$.\\
+\end{tabular}
+
+\answer{Pipelining increases network utilization by a factor of $N$, see slide 45. It won't reduce packet queuing time -- it might even increase it when there is congestion.}
+
+
+
+\end{document}
