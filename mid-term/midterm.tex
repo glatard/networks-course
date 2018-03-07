@@ -1,0 +1,437 @@
+\documentclass{llncs}
+
+\usepackage{amsmath} % for equation*
+\usepackage{wasysym} % for \Box
+\usepackage{color}
+\usepackage{hyperref}
+\usepackage{graphicx}
+\definecolor{darkgreen}{rgb}{0,0.7,0}
+
+\newcommand{\myspace}[0]{\vspace*{0.25cm}}
+\newcommand{\todo}[1]{TODO: #1}
+
+% Fix link colors
+\hypersetup{
+  colorlinks = true,
+  linkcolor=red,
+  citecolor=red,
+  urlcolor=blue,
+  linktocpage % so that page numbers are clickable in toc
+}
+
+
+\newcommand{\answer}[1]{{\color{red}\textit{#1}\color{black}}}
+\title{COMP 445 -- Midterm exam \\ Winter 2018 \\ Wednesday, February 28, 2018\\ Duration: 75 minutes}
+
+\author{Tristan Glatard\\
+  \href{mailto:tristan.glatard@concordia.ca}{tristan.glatard@concordia.ca}
+}
+
+\institute{Concordia University\\
+  Department of Computer Science and Software Engineering}
+
+\begin{document}
+
+\maketitle
+
+\section*{Instructions}
+\begin{itemize}
+\item All questions will receive equal points.
+\item Each question may have zero, one, or more than one
+  correct choices.
+\item Partial answers will not
+  receive any point.
+\item Wrong answers will receive 0 point (no negative marking).
+\item No books, notes or extra paper.
+\item No cell phones, laptops or any electronic devices except ENCS calculators.
+\item This exam is 6 pages long, including the cover page. It has 15 questions labeled from \textbf{Q1} to \textbf{Q15}. Check that your copy is complete.
+\item This exam counts for 25\% of your final grade.
+\end{itemize}
+
+\hrulefill\\
+
+\myspace
+
+\myspace
+
+Student ID: \dotfill
+
+\myspace
+
+\myspace
+
+First Name / Last Name: \dotfill
+
+\myspace
+
+\myspace
+
+Signature: \dotfill
+
+\myspace
+
+\myspace
+
+\hrulefill
+
+\newpage
+
+\section{Introduction}
+
+% Encapsulation
+\paragraph{\textbf{Q1:}}
+In a client (sender) complying to the Internet protocol stack, when a
+network-level protocol (for instance IP) receives a packet from a
+transport-level protocol (for instance TCP):
+
+\begin{tabular}{ccl}
+  a) & $\Box$ & It removes the transport-level header.\\
+  \\
+  b) & $\CheckedBox$ & It adds a network-level header to the transport-level packet.\\
+  \\
+  c) & $\Box$ & It adds network-level data to the transport-level data.\\
+  \\
+  d) & $\Box$ & It recomputes the checksum in the transport-level header.
+\end{tabular}
+
+\answer{This is the encapsulation principle, see slide 62 in
+  introduction. Layer n simply adds a header (and sometimes a trailer)
+  to the packet sent by layer n+1. It doesn't remove the header added
+  by layer n+1 (a), otherwise the transport-level packet would be
+  unreadable at the destination. It doesn't add any data to the packet
+  (b). It doesn't recompute the checksum in the transport-level header
+  (c) since it doesn't modify the tranport-level packet. }
+
+% Traceroute
+\paragraph{\textbf{Q2:}}
+The \texttt{traceroute} trace below was obtained between a host in Canada and a host in Europe. 
+\begin{verbatim}
+$ traceroute -n www.uab.es
+traceroute to www.uab.es (158.109.95.225), 30 hops max, 60 byte packets
+ 1  * * *
+ 2  192.168.25.11  0.250 ms  0.233 ms  0.212 ms
+ 3  * * *
+ 4  132.205.96.222  0.346 ms  0.329 ms  0.311 ms
+ 5  132.205.5.2  0.918 ms  0.901 ms  0.885 ms
+ 6  10.99.100.53  0.619 ms  0.778 ms  0.758 ms
+ 7  10.98.1.34  0.743 ms  0.591 ms  0.572 ms
+ 8  132.205.236.2  0.732 ms  0.697 ms  0.726 ms
+ 9  * * *
+10  132.202.30.201  1.052 ms  1.026 ms  0.993 ms
+11  132.202.80.9  1.145 ms  1.097 ms  0.978 ms
+12  132.202.80.10  1.187 ms  1.273 ms  1.232 ms
+13  205.189.32.250  1.200 ms  1.099 ms  1.065 ms
+14  62.40.124.225  84.720 ms  84.197 ms  83.598 ms
+15  62.40.98.153  90.630 ms  90.597 ms  90.578 ms
+16  62.40.98.72  96.725 ms  96.777 ms  96.725 ms
+17  62.40.124.193  123.867 ms  122.548 ms  122.462 ms
+18  130.206.245.89  117.301 ms  116.973 ms  116.893 ms
+19  130.206.211.70  122.085 ms  122.184 ms  122.438 ms
+20  84.88.19.154  124.765 ms  124.795 ms  124.807 ms
+21  158.109.94.209  124.437 ms  124.683 ms  124.443 ms
+22  158.109.94.201  124.683 ms  124.845 ms  124.839 ms
+23  * * *
+24  * * *
+25  * * *
+26  * * *
+27  * * *
+28  158.109.95.225  124.702 ms * *
+\end{verbatim}
+
+\newpage
+In the previous trace:
+
+\begin{tabular}{ccl}
+  a) & $\CheckedBox$ & The first router located in Europe is 62.40.124.225 (\#14).\\
+  \\
+  b) & $\Box$ & The first router located in Europe is 62.40.124.193 (\#17).\\
+  \\
+  c) & $\Box$ & Router \#23 used an unsupported version of TCP.\\
+  \\
+  d) & $\CheckedBox$ & Router \#23 did not answer the traceroute probes.
+\end{tabular}
+
+\answer{See slide 50 in introduction and in-class demos. The typical
+  RTT of a transatlantic communication is 80~ms, so router \#14 has to
+  be the first one located in Europe (a). Stars (*) indicate lost
+  probes (unlikely when three probes are missing) or router not
+  replying (d).}
+
+% Delays
+\paragraph{\textbf{Q3:}}
+Consider two hosts A and B connected through a single router X (the
+network looks like A -- X --B). Assume that (1) the link between A and
+X is of capacity $R_{A-X}$ = 1~Gbps and of length $l_{A-X}=100 km$
+and (2) the link between X and B is of capacity $R_{X-B}$ = 10~Gbps
+and of length $l_{X-B}=10km$. The propagation speed in all links is
+s=$10^8$ m/s. What is the time required for N=4 packets of size L=2~MB
+to be delivered from A to B?  We assume that 1~Gb=1000 Mb.
+
+\begin{tabular}{ccl}
+  a) & $\Box$ & 71.5~ms\\
+  \\
+  b) & $\Box$ & 70.4~ms\\
+  \\
+  c) & $\CheckedBox$ & 66.7~ms \\
+  \\
+  d) & $\Box$ & 65.6~ms
+\end{tabular}
+
+\answer{As in TA1's Q2 and Q3. Since $R_{X-B}>R_{X-A}$, there is
+  no queue in the router and the delivery time is:
+  \begin{equation*}
+    t=N\frac{L}{R_{A-X}}+\frac{L}{R_{A-X}}+\frac{l_{A-X}+l_{X-B}}{s}
+  \end{equation*}
+  It gives t=66.7~ms.
+}
+
+\paragraph{\textbf{Q4:}} 
+In the internet protocol stack, a different transport-level protocol is used depending whether hosts
+are connected through a wired or wireless network adapter:
+
+\begin{tabular}{ccl}
+  a) & $\Box$ & True\\
+  \\
+  b) & $\CheckedBox$ & False
+\end{tabular}
+
+\answer{See slides 56-62 in the introduction. First, layer n uses only
+  the services of layer n-1: the transport layer doesn't even know
+  about the link layer (where a wired or wireless protocol is
+  used). Second, a change in the implementation of a layer's service
+  is transparent to the rest of the system. In practice, a programmer
+  doesn't have to create a different type of socket (UDP or TCP)
+  depending whether the application is connected through a wired or a
+  wireless connection: that would make internet application
+  development impossible!}
+
+\paragraph{\textbf{Q5:}}
+Select the correct statement(s):
+
+\begin{tabular}{ccl}
+  a) & $\CheckedBox$ & Packet switching can accommodate more users than circuit switching.\\
+  \\
+  b) & $\Box$ & Circuit switching has less overhead than packet switching.\\
+  \\
+  c) & $\CheckedBox$ & Circuit switching leads to less congestion than packet switching.\\
+  \\
+  d) & $\CheckedBox$ & Packet switching may lead to packet losses.\\
+\end{tabular}
+
+\answer{Packet switching allows more users to use the network (a), as
+  shown in slide 30 of the introduction. Circuit switching requires to establish a circuit between the source and the destination, which creates overhead compared to packet switching (b). In packet switching, excessive congestion is possible (slide 31), which wouldn't happen with circuit switching (c). Packet switching may lead to packet losses when routers' buffers are full (d, slide 31).}
+
+\section{Application Layer}
+
+\paragraph{\textbf{Q6:}}
+Among the following protocols, which ones may be involved in the
+retrieval of a Web page by a Web browser?
+
+\begin{tabular}{ccl}
+  a) & $\CheckedBox$ & DNS\\
+  \\
+  b) & $\CheckedBox$ & TCP\\
+  \\
+  c) & $\CheckedBox$ & HTTP\\
+  \\
+  d) & $\Box$ & POP3
+\end{tabular}
+
+\answer{To retrieve a Web page, a Web browser first needs to resolve
+  the name of the Web server, which is done using DNS (a). Then, a TCP
+  connection (b) is established with the Web server. Finally, the TCP
+  connection is used to send an HTTP request to the server (c). See
+  also LA1. POP3 is a mail protocol which has nothing to do with Web
+  requests.}
+
+% HTTP
+\paragraph{\textbf{Q7:}}
+The following response was received by a Web browser from an HTTP server:
+
+\includegraphics[width=\textwidth]{http.png}
+
+This response suggests that:
+
+\begin{tabular}{ccl}
+  a) & $\Box$ & The client sent a bad request, for instance not well formatted.\\
+  \\
+  b) & $\Box$ & A Web cache (proxy server) is used. \\
+  \\
+  c) & $\CheckedBox$ & The client sent a conditional GET request.\\
+  \\
+  d) & $\Box$ & A file has been transferred.
+\end{tabular}
+
+\answer{HTTP response code 304 (Not Modified) indicates that a
+  conditional GET request was issued by the client (c, slide 43). If
+  the client had sent a bad request (a), an error message and a code
+  starting with 4 would have been returned. Web proxies are
+  transparent on the request/response -- nothing here suggests that
+  a proxy was used (b). No data was transferred with this response (d).}
+
+% DNS
+\paragraph{\textbf{Q8:}}
+Select the correct statement(s):
+
+\begin{tabular}{ccl}
+  a) & $\CheckedBox$ & The same DNS query can be executed in an iterative or recursive way.\\
+  \\
+  b) & $\Box$ & DNS queries are processed by network routers.\\
+  \\
+  c) & $\Box$ & The email server for a particular domain can be retrieved by querying DNS records of type \texttt{CNAME}.\\
+  \\
+  d) & $\CheckedBox$ & DNS is a distributed database.
+\end{tabular}
+
+\answer{The DNS resolution type (iterative or recursive) is
+  independent from the type of DNS query issued (a, slide 63-64). As a
+  protocol of the application layer, DNS is executed at the network
+  edge and not at the core (b, routers are part of the core). The
+  email server of a domain can be retrieved by querying DNS records of
+  type \texttt{MX}, not \texttt{CNAME} (c, slide 66). DNS is a
+  distributed database (d, slide 59).}
+
+% SMTP
+\paragraph{\textbf{Q9:}}
+When the SMTP server handling emails for domain \texttt{example.com}
+is down, assuming  that all the other servers in the network are up and that a server hosts at most one application:
+
+\begin{tabular}{ccl}
+  a) & $\Box$ & Bob (\texttt{bob@somedomain.com}) cannot send emails to Alice (\texttt{alice@example.com}). \\
+  \\
+  b) & $\CheckedBox$ & Alice (\texttt{alice@example.com}) cannot receive new emails.\\
+  \\
+  c) & $\Box$ & \url{http://www.example.com} is not accessible.\\
+  \\
+  d) & $\Box$ & DNS queries of MX records for domain \texttt{example.com} do not return any result.
+\end{tabular}
+
+\answer{When the SMTP server handling Alice's domain is down, Bob can
+  still compose and send emails to Alice (a, slide 48). Such emails
+  would be queued in Bob's SMTP server but couldn't be delivered to
+  Alice's SMTP server: Alice couldn't receive them
+  (b). \texttt{http://www.example.com} is a Web URL, it has nothing to
+  do with an email server (c). Likewise, the DNS server of Alice's
+  domain has no reason to not answer queries (d).}
+
+% P2P
+\paragraph{\textbf{Q10:}}
+
+Assuming the network in the Figure below, where $u_s$=1~Gbps is the
+upload rate of the server, $u_i$=10~Mbps is the upload rate from client $i$
+and $d_i$=100~Mbps is the download rate from client $i$, what is the minimum
+time to deliver a file of size F=1~GB to N=5 clients in a P2P
+architecture? Assume 1~GB=1000~MB; note that 1~B=8~bits.
+
+\includegraphics[width=\textwidth]{p2p.png}
+
+\begin{tabular}{ccl}
+  a) & $\CheckedBox$ & 80~s\\
+  \\
+  b) & $\Box$ & 8~s\\
+  \\
+  c) & $\Box$ & 4~s\\
+  \\
+  d) & $\Box$ & 2~s\\
+\end{tabular}
+
+\answer{See slide 75: $D_{P2P}\geq
+  \max\{\frac{F}{u_s},\frac{F}{d_{min}},\frac{N.F}{u_s+N.u_i}\}$.}
+
+\section{Transport Layer}
+
+% Trace analysis
+%\paragraph{\textbf{Q10:}} 
+
+% TCP connection establishment
+\paragraph{\textbf{Q11:}}
+A TCP client in state 'SYN sent' receives a SYNACK segment from the
+server, containing the right acknowledgment number. What is the status
+of the client's TCP connection after the SYNACK segment is received?
+
+\begin{tabular}{ccl}
+  a) & $\Box$ &  SYN sent\\
+  \\
+  b) & $\Box$ &  Listen\\
+  \\
+  c) & $\Box$ & SYN rcvd\\
+  \\
+  d) & $\CheckedBox$ & ESTAB \\
+\end{tabular}
+
+\answer{See slide 81.}
+
+% TCP state machine
+\paragraph{\textbf{Q12:}}
+A timeout occurs while a TCP sender is in Congestion Avoidance mode with cwnd=68KB, ssthresh=32KB and MSS=1KB. Assuming that TCP Reno is used, what is the state of the TCP sender after the timeout occurs?
+
+\begin{tabular}{ccl}
+  a) & $\CheckedBox$ &  Slow Start\\
+  \\
+  b) & $\Box$ &  Congestion Avoidance\\
+  \\
+  c) & $\Box$ & Fast Recovery \\
+  \\
+  d) & $\Box$ & SYN sent \\
+\end{tabular}
+
+\answer{See slides 99-101. A timeout always bring the TCP state
+  machine back to Slow Start, regardless of the TCP version (Tahoe or
+  Reno).}
+
+%% % Congestion window
+\paragraph{\textbf{Q13:}}
+
+In TCP, the number of non-acknowledged bytes (in-flight bytes) is bounded by:
+
+\begin{tabular}{ccl}
+  a) & $\CheckedBox$ & The receiver window (\texttt{rwnd}), which implements flow control.\\
+  \\
+  b) & $\Box$ & The maximal segment size (\texttt{MSS}), which implements multiplexing.\\
+  \\
+  c) & $\Box$ & The slow-start threshold (\texttt{sstresh}), which implements fast retransmit.\\
+  \\
+  d) & $\CheckedBox$ & The congestion window (\texttt{cwnd}), which implements congestion control.\\
+\end{tabular}
+
+\answer{The number of non-acknowledged bytes is limited by the
+  receiver window (a, slide 75) and by the congestion window (d, slide
+  97). The receiver window implements flow control and the congestion
+  window implements congestion control. The maximal segment size (b)
+  limits the size of a segment but doesn't limit the number of
+  in-flight bytes. The slow-start threshold (c) defines when the TCP
+  state machine will move from Slow Start to Congestion Avoidance.}
+
+\paragraph{\textbf{Q14:}}
+What is the UDP checksum of D=1100110100100111001100111111110?
+
+\begin{tabular}{ccl}
+  a) & $\Box$ & 1001101101111111
+  \\
+  b) & $\Box$ & 0110010010000000
+  \\
+  c) & $\Box$ & 1111111011011001
+  \\
+  d) & $\Box$ & 0000000100100110
+\end{tabular}
+
+\answer{This is a typo: D should have had 32 bits, not 31. Question
+  was discarded and given as a bonus point.}
+
+\paragraph{\textbf{Q15:}}
+
+It is possible that the checksum of a UDP packet is correct but the packet is corrupted.
+
+\begin{tabular}{ccl}
+  a) & $\CheckedBox$ & True\\
+  \\
+  b) & $\Box$ & False
+\end{tabular}
+
+\answer{See slide 18, 19 and in-class discussion. Two different
+  packets may have the same checksum, for instance if entire 16-bit
+  words have been swapped.}
+
+
+
+\end{document}
