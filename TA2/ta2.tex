@@ -19,7 +19,7 @@
 }
 
 
-\newcommand{\answer}[1]{\color{red}\textit{#1}\color{black}}
+\newcommand{\answer}[1]{}%\color{red}\textit{#1}\color{black}}
 \title{COMP 445 -- Theoretical Assignment 2 (TA1)\\ Winter 2018}
 
 \author{Tristan Glatard\\
@@ -97,7 +97,7 @@ An application may choose to transmit data using UDP rather than just IP (the ne
 \begin{tabular}{ccl}
   a) & $\Box$ &  High throughput\\
   \\
-  b) & $\CheckedBox$ &  Multiplexing / de-multiplexing\\
+  b) & $\Box$ &  Multiplexing / de-multiplexing\\
   \\
   c) & $\Box$ &  Security\\
   \\
@@ -118,7 +118,7 @@ initial estimated RTT of 31ms and $\alpha$ = 0.125?
 \begin{tabular}{ccl}
   a) & $\Box$ &  32ms\\
   \\
-  b) & $\CheckedBox$ &  30.9ms\\
+  b) & $\Box$ &  30.9ms\\
   \\
   c) & $\Box$ &  31.8ms\\
   \\
@@ -141,7 +141,7 @@ Start mode with cwnd=1KB, ssthresh=64KB and MSS=1KB. What is the
 state of the TCP sender after the second ACK is received?
 
 \begin{tabular}{ccl}
-  a) & $\CheckedBox$ &  Slow Start\\
+  a) & $\Box$ &  Slow Start\\
   \\
   b) & $\Box$ &  Congestion Avoidance\\
   \\
@@ -169,7 +169,7 @@ of the congestion window) after the second ACK is received?
   \\
   b) & $\Box$ &  2KB\\
   \\
-  c) & $\CheckedBox$ &  3KB\\
+  c) & $\Box$ &  3KB\\
   \\
   d) & $\Box$ &  4KB
 \end{tabular}
@@ -184,7 +184,7 @@ Wireshark:\\
 This trace contains:\\
 
 \begin{tabular}{ccl}
-  a) & $\CheckedBox$ & A TCP segment that contains an acknowledgment  \\
+  a) & $\Box$ & A TCP segment that contains an acknowledgment  \\
   \\
   b) & $\Box$ & A UDP segment that contains an acknowledgment \\
   \\
@@ -208,13 +208,13 @@ This trace contains:\\
 Among the following mechanisms, which one(s) can be used to provide reliable data transfer? 
 
 \begin{tabular}{ccl}
-  a) & $\CheckedBox$ & Checksums  \\
+  a) & $\Box$ & Checksums  \\
   \\
-  b) & $\CheckedBox$ &  Timeouts\\
+  b) & $\Box$ &  Timeouts\\
   \\
-  c) & $\CheckedBox$ &  Sequence numbers\\
+  c) & $\Box$ &  Sequence numbers\\
   \\
-  d) & $\CheckedBox$ &  Acknowledgments\\
+  d) & $\Box$ &  Acknowledgments\\
 \end{tabular}
 
 \answer{All these mechanisms may be used to provide reliable data transfer. See slides 28-41.}
@@ -227,7 +227,7 @@ In connection-oriented multiplexing, two packets with the same
 \begin{tabular}{ccl}
   a) & $\Box$ & Yes\\
   \\
-  b) & $\CheckedBox$ &  No\\
+  b) & $\Box$ &  No\\
 \end{tabular}
 
 \answer{In connection-oriented (de-)multiplexing, packets are assigned
@@ -237,7 +237,7 @@ In connection-oriented multiplexing, two packets with the same
 What is the UDP checksum of D=10101010101010101010101010101010?
 
 \begin{tabular}{ccl}
-  a) & $\CheckedBox$ & 1010101010101010\\
+  a) & $\Box$ & 1010101010101010\\
   \\
   b) & $\Box$ & 0101010101010101\\
   \\
@@ -264,14 +264,16 @@ In a pipelined protocol, the sender allows N simultaneous non-acknowledged packe
 \begin{tabular}{ccl}
   a) & $\Box$ & Increase network utilization, by a factor of $\frac{N}{2}$.\\
   \\
-  b) & $\CheckedBox$ &  Increase network utilization, by a factor of $N$.\\
+  b) & $\Box$ &  Increase network utilization, by a factor of $N$.\\
   \\
   c) & $\Box$ &  Reduce packet queuing time, by a factor of $\frac{N}{2}$.\\
   \\
   d) & $\Box$ &  Reduce packet queuing time, by a factor of $N$.\\
 \end{tabular}
 
-\answer{Pipelining increases network utilization by a factor of $N$, see slide 45. It won't reduce packet queuing time -- it might even increase it when there is congestion.}
+\answer{Pipelining increases network utilization by a factor of $N$,
+  see slide 45. It won't reduce packet queuing time -- it might even
+  increase it when there is congestion.}
 
 
 
